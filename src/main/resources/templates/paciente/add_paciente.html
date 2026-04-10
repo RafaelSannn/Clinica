@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-bt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous" defer></script>
+    <link rel="stylesheet" href="/css/styles_forms.css">
+    <title>Cadastrar novo Paciente</title>
+</head>
+<body>
+    <div class="container col-11 col-md-9" id="form-container">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <h2>Realize o seu cadastro</h2>
+                <form th:action="@{/pacientes/salvar}" th:method="${paciente.id} == 0 ? post : put" th:object="${paciente}">
+                    <input id="id" type="hidden" th:field="*{id}"/>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" maxlength="120" id="nome"
+                               name="nome" placeholder="Digite seu nome" th:field="*{nome}">
+                        <label for="nome" class="form-label">Digite seu nome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control" id="data_nascimento" name="data_nascimento"
+                               placeholder="Data de nascimento (dd/mm/yyyy)"
+                               th:value="*{data_nascimento}">
+                        <label for="data_nascimento" class="form-label">Data de nascimento (dd/mm/yyyy)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select form-select-sm" aria-label="Small select example"
+                                id="sexo" name="sexo" placeholder="Selecione o sexo">
+                            <option value="F" th:selected="${paciente.sexo} == 'F' ? true : false">Feminino</option>
+                            <option value="M" th:selected="${paciente.sexo} == 'M' ? true : false">Masculino</option>
+                        </select>
+                        <label for="sexo" class="form-label">Selecione o sexo</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="submit" class="btn btn-primary" value="Salvar">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <img src="/img/paciente.avif" alt="Hello New Customer" class="img-fluid">
+                    </div>
+                    <div class="col-12" id="link-container">
+                        <a href="/pacientes/listar">Eu já tenho uma conta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+        <footer class="footer">
+            <p>&copy; 2024 CLínica MCL</p>
+        </footer>
+    </div>
+</body>
+</html>
