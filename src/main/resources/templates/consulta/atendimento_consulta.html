@@ -9,41 +9,50 @@
 <div class="container mt-4">
     <h2>Atendimento ao Paciente</h2>
 
-    <form>
+    <form th:action="@{/consultas/atendimento/salvar}" th:object="${consulta}" method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+
         <div class="mb-3">
             <label>Médico</label>
-            <input type="text" class="form-control" th:value="${consulta.medico.nome}" readonly>
+            <input type="text" class="form-control" th:value="${consulta.medico.nome}" readonly disabled>
         </div>
+
         <div class="mb-3">
             <label>Paciente</label>
-            <input type="text" class="form-control" th:value="${consulta.paciente.nome}" readonly>
+            <input type="text" class="form-control" th:value="${consulta.paciente.nome}" readonly disabled>
         </div>
+
         <div class="mb-3">
             <label>Especialidade</label>
-            <input type="text" class="form-control" th:value="${consulta.medico.especialidade}" readonly>
+            <input type="text" class="form-control" th:value="${consulta.medico.especialidade}" readonly disabled>
         </div>
+
         <div class="mb-3">
             <label>Data/Hora da Consulta</label>
             <input type="text" class="form-control"
-                   th:text="${#temporals.format(consulta.data_consulta, 'dd/MM/yyyy HH:mm')}" readonly>
+                   th:value="${#temporals.format(consulta.data_consulta, 'dd/MM/yyyy HH:mm')}" readonly disabled>
         </div>
+
         <div class="mb-3">
-            <label for="Sintomas">Sintomas</label>
-            <textarea class="form-control" id="Sintomas" rows="3"
-                      th:text="${consulta.sitomas}" readonly></textarea>
+            <label for="sintomas">Sintomas</label>
+            <textarea class="form-control" id="sintomas" rows="3"
+                      th:field="*{sintomas}" readonly></textarea>
         </div>
+
         <div class="mb-3">
-            <label for="Receita">Receita</label>
-            <textarea class="form-control" id="Receita" rows="3"></textarea>
+            <label for="receita">Receita</label>
+            <textarea class="form-control" id="receita" rows="3" th:field="*{receita}" required></textarea>
         </div>
+
         <div class="mb-3">
-            <label for="AvaliacaoAtendimento">Avaliação do Atendimento (0 a 10)</label>
-            <input type="number" class="form-control" id="AvaliacaoAtendimento"
-                   step="0.01" min="0" max="10">
+            <label for="avaliacao_atendimento">Avaliação do Atendimento (0 a 10)</label>
+            <input type="number" class="form-control" id="avaliacao_atendimento"
+                   th:field="*{avaliacao_atendimento}" step="0.01" min="0" max="10" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar Atendimento</button>
-        <a href="/consultas/listar" class="btn btn-secondary">Voltar</a>
+        <a th:href="@{/consultas/listar}" class="btn btn-secondary">Voltar</a>
     </form>
 </div>
 </body>

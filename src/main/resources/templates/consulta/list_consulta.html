@@ -19,7 +19,7 @@
                 <th>Especialidade</th>
                 <th>Médico</th>
                 <th>Data/Hora</th>
-                <th>Ação</th>
+                <th>Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -31,10 +31,12 @@
                 <td>
                     <a class="btn btn-sm btn-success"
                        th:href="@{/consultas/{id}/atender(id=${consulta.id})}">Atender</a>
+
                     <a class="btn btn-sm btn-info"
-                       th:href="@{/consultas/{id}/atualizar(id=${consulta.id})}">Editar</a>
+                       th:href="@{/consultas/{id}/editar(id=${consulta.id})}">Editar</a>
+
                     <a class="btn btn-sm btn-danger"
-                       th:href="@{/consultas/{id}/remover(id=${consulta.id})}">Excluir</a>
+                       th:href="@{/consultas/{id}/excluir(id=${consulta.id})}">Excluir</a>
                 </td>
             </tr>
             </tbody>

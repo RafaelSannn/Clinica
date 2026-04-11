@@ -17,15 +17,14 @@
     <form th:action="@{/consultas/salvar}" method="post" th:object="${consulta}">
         <input type="hidden" th:field="*{id}"/>
 
-        <!-- Paciente -->
         <div class="mb-3">
             <label for="paciente" class="form-label">Paciente</label>
-            <select class="form-select select2-paciente" id="paciente" name="paciente" th:field="*{paciente}" required>
+            <select class="form-select select2-paciente" id="paciente" th:field="*{paciente}" required>
                 <option value="">Selecione um paciente</option>
+                <option th:if="*{paciente != null}" th:value="*{paciente.id}" th:text="*{paciente.nome}" selected></option>
             </select>
         </div>
 
-        <!-- Especialidade -->
         <div class="mb-3">
             <label for="especialidade" class="form-label">Especialidade</label>
             <select class="form-select" id="especialidade" name="especialidade" required>
@@ -34,35 +33,35 @@
             </select>
         </div>
 
-        <!-- Médico -->
         <div class="mb-3">
             <label for="medico" class="form-label">Médico</label>
-            <select class="form-select" id="medico" name="medico" th:field="*{medico}" required disabled>
+            <select class="form-select" id="medico" th:field="*{medico}" required disabled>
                 <option value="">Selecione um médico</option>
+                <option th:if="*{medico != null}" th:value="*{medico.id}" th:text="*{medico.nome}" selected></option>
             </select>
         </div>
 
-        <!-- Data e Hora -->
-        <div class="form-group">
+        <div class="mb-3">
             <label for="data_consulta">Data e Hora da Consulta</label>
-            <input type="datetime-local" class="form-control"
-                   id="data_consulta" th:field="*{data_consulta}" required />
+            <input type="datetime-local" class="form-control" id="data_consulta" th:field="*{data_consulta}" required />
         </div>
 
-        <!-- Sintomas -->
         <div class="mb-3">
             <label for="sintomas" class="form-label">Sintomas</label>
-            <textarea class="form-control" id="sintomas" th:field="*{sitomas}" required></textarea>
+            <textarea class="form-control" th:field="*{sintomas}" rows="3" required></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="/consultas/listar" class="btn btn-secondary">Cancelar</a>
+        <a th:href="@{/consultas/listar}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 
 <script>
     $(document).ready(function() {
-        // Paciente - Select2 com busca
+        if ($('#especialidade').val() || $('#medico').val()) {
+            $('#medico').prop('disabled', false);
+        }
+
         $('.select2-paciente').select2({
             placeholder: "Digite para buscar paciente...",
             minimumInputLength: 2,
@@ -71,17 +70,12 @@
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
-                    return {
-                        termo: params.term
-                    };
+                    return { termo: params.term };
                 },
                 processResults: function (data) {
                     return {
                         results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.nome
-                            };
+                            return { id: item.id, text: item.nome };
                         })
                     };
                 },
@@ -89,25 +83,20 @@
             }
         });
 
-        // Médicos - Filtro pela especialidade
         $('#especialidade').change(function () {
             const especialidade = $(this).val();
             const medicoSelect = $('#medico');
-
             medicoSelect.empty().append('<option value="">Selecione um médico</option>');
 
             if (especialidade) {
                 medicoSelect.prop('disabled', false);
-
                 $.ajax({
                     url: '/consultas/medicosPorEspecialidade',
                     type: 'GET',
                     data: { especialidade: especialidade },
                     success: function (data) {
                         $.each(data, function (i, medico) {
-                            medicoSelect.append(
-                                `<option value="${medico.id}">${medico.nome}</option>`
-                            );
+                            medicoSelect.append(`<option value="${medico.id}">${medico.nome}</option>`);
                         });
                     }
                 });

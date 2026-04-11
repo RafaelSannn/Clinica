@@ -30,16 +30,19 @@ public class MedicoDaoImpl implements MedicoDao {
 
     @Override
     public void atualizar(Medico medico) {
+        // Necessário para sincronizar estado de entidades destacadas
         em.merge(medico);
     }
 
     @Override
     public void excluir(long id) {
+        // getReference evita uma consulta SELECT desnecessária antes do DELETE
         em.remove(em.getReference(Medico.class, id));
     }
 
     @Override
     public List<Medico> findByEspecialidade(Especialidade especialidade) {
+        // Agora m.especialidade e o parâmetro são ambos do tipo Especialidade (Enum)
         return em.createQuery(
                         "SELECT m FROM Medico m WHERE m.especialidade = :especialidade",
                         Medico.class)

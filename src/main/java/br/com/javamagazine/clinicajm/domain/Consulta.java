@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,32 +18,33 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
-    @Size(min = 10, max = 255)
-    @Column(name = "sitomas", nullable = false, length = 255)
-    private String sitomas;
-
-    @Column(name = "receita",length = 255)
-    private String receita;
-
-    @Column(name="data_consulta")
-    // AQUI ESTAVA O ERRO! Trocado para o padrão ISO que o HTML5 envia.
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name = "data_consulta")
     private LocalDateTime data_consulta;
 
-    @Column(name="data_atendimento")
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private LocalDate data_atendimento;
+    @NotBlank
+    @Size(min = 10)
+    @Column(name = "sintomas", nullable = false, length = 255)
+    private String sintomas;
 
-    @Column(name="avaliacao_atendimento")
-    private Double avaliacao_atendimento;
+    @Column(length = 255)
+    private String receita;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_medico")
-    private Medico medico;
+    @Column(name = "data_atendimento")
+    private LocalDateTime data_atendimento;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(name = "avaliacao_atendimento")
+    private String avaliacao_atendimento;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
     @JoinColumn(name = "fk_id_paciente")
     private Paciente paciente;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "fk_id_medico")
+    private Medico medico;
 }

@@ -1,14 +1,15 @@
 package br.com.javamagazine.clinicajm.domain;
 
-import br.com.javamagazine.clinicajm.domain.enums.Sexo;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,13 +25,18 @@ public class Paciente {
     @Column(nullable = false, length = 120)
     private String nome;
 
-
     @Column(name="data_nascimento")
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private LocalDate data_nascimento;
 
     @NotBlank
-    @Column(name = "SEXO")
+    @Column(name = "sexo")
     private String sexo;
 
+    // CascadeType.ALL garante integridade referencial na exclusão
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
 }

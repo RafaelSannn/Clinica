@@ -1,10 +1,16 @@
 package br.com.javamagazine.clinicajm.domain;
 
 import br.com.javamagazine.clinicajm.domain.enums.Especialidade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -20,7 +26,17 @@ public class Medico {
     @Column(nullable = false, length = 120)
     private String nome;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "especialidade", nullable = false)
+    @Column(nullable = false)
     private Especialidade especialidade;
+
+    // Mapeamento bidirecional com exclusão em cascata
+    // Exclude necessário para evitar recursão infinita no toString/hashCode do Lombok
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
+
 }
