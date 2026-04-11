@@ -27,8 +27,8 @@ public class Consulta {
     private String receita;
 
     @Column(name="data_consulta")
-
-    @DateTimeFormat(pattern="dd/MM/yyyy HH:mm")
+    // AQUI ESTAVA O ERRO! Trocado para o padrão ISO que o HTML5 envia.
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime data_consulta;
 
     @Column(name="data_atendimento")
