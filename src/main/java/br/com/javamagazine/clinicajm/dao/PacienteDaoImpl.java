@@ -34,7 +34,10 @@ public class PacienteDaoImpl implements PacienteDao {
 
     @Override
     public void excluir(long id) {
-        em.remove(em.getReference(Paciente.class, id));
+        Paciente paciente = em.find(Paciente.class, id);
+        if (paciente != null) {
+            em.remove(paciente);
+        }
     }
 
     @Override

@@ -10,5 +10,5 @@ public interface MedicoService {
     Medico recuperarPorId(Long id);
     void atualizar(Medico medico);
     void excluir(long id);
-    List<Medico> recuperarPorEspecialidade(Especialidade especialidade); // Novo método
+    List<Medico> recuperarPorEspecialidade(Especialidade especialidade);
 }

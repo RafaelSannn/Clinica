@@ -15,31 +15,28 @@ public class PacienteServiceImpl implements PacienteService {
     private PacienteDao pacienteDao;
 
     @Override
-    public void salvar(Paciente paciente) {
-        pacienteDao.salvar(paciente);
-    }
+    public void salvar(Paciente paciente) { pacienteDao.salvar(paciente); }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Paciente> recuperar() {
-        return pacienteDao.recuperar();
-    }
+    public List<Paciente> recuperar() { return pacienteDao.recuperar(); }
 
     @Override
     @Transactional(readOnly = true)
-    public Paciente recuperarPorId(Long id) {
-        return pacienteDao.recuperarPorID(id);
-    }
+    public Paciente recuperarPorId(Long id) { return pacienteDao.recuperarPorID(id); }
 
     @Override
     public void atualizar(Paciente paciente) {
-        pacienteDao.atualizar(paciente);
+        // CORREÇÃO: Carrega o objeto do banco para não perder a referência das consultas
+        Paciente pDb = pacienteDao.recuperarPorID(paciente.getId());
+        pDb.setNome(paciente.getNome());
+        pDb.setData_nascimento(paciente.getData_nascimento());
+        pDb.setSexo(paciente.getSexo());
+        // O Dirty Checking do Hibernate faz o update no final da transação
     }
 
     @Override
-    public void excluir(long id) {
-        pacienteDao.excluir(id);
-    }
+    public void excluir(long id) { pacienteDao.excluir(id); }
 
     @Override
     @Transactional(readOnly = true)

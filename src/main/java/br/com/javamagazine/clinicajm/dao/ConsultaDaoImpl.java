@@ -40,8 +40,9 @@ public class ConsultaDaoImpl implements ConsultaDao {
 
     @Override
     public void excluir(long id) {
-        em.remove(em.getReference(Consulta.class, id));
+        Consulta consulta = em.find(Consulta.class, id);
+        if (consulta != null) {
+            em.remove(consulta);
+        }
     }
-
-
 }
